@@ -10,7 +10,7 @@ const ViewProducts = () => {
   const [errorMessage, setErrorMEssage] = useState("");
 
   useEffect(() => {
-    const getSupplier = async () => {
+    const getProduct = async () => {
       const response = await axios.get(baseApi + "products/" + id);
       if (response.status !== 200) {
         setErrorMEssage("Failed to fetch data. Please try again.");
@@ -19,16 +19,14 @@ const ViewProducts = () => {
       setProducts(response.data);
       setIsloading(false);
     };
-    getSupplier();
+    getProduct();
   }, []);
 
   const deleteSupplier = async (id) => {
     const validate = confirm("Are you sure you want to remove this product?");
     if (validate) {
       setIsloading(true);
-      const response = await axios.patch(baseApi + "products/" + id, {
-        productStatus: "not-available",
-      });
+      const response = await axios.delete(baseApi + "products/" + id);
       setProducts({});
       setIsloading(false);
     }
@@ -65,7 +63,12 @@ const ViewProducts = () => {
           </h4>
           <div className="text-end mt-3">
             <Link to={"/products"}>Back to Lists</Link>
-            <button className="btn btn-info btn-sm mx-1">Edit</button>
+            <Link
+              className="btn btn-info btn-sm mx-1"
+              to={`/products/${id}/edit`}
+            >
+              Edit
+            </Link>
             <button
               className="btn btn-danger btn-sm"
               onClick={() => {

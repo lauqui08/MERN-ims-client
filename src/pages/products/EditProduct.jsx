@@ -1,47 +1,39 @@
-import runningPikachu from "../../assets/pikachu-running.gif";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import { Link } from "react-router-dom";
-const AddProduct = () => {
+const EditProduct = () => {
+  const { id } = useParams();
   const baseApi = import.meta.env.VITE_BASE_API;
   const [product, setProduct] = useState({
     productName: "",
     productPrice: "",
     productQuantity: "",
+    productStatus: "",
   });
-  const [isLoading, setIsloading] = useState(true);
-  const [errorMessage, setErrorMEssage] = useState("");
-  const [isAddedProduct, setIsAddedProduct] = useState(Boolean);
+  const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    const getProduct = async () => {
+      const response = await axios.get(baseApi + "products/" + id);
+      if (response.status !== 200) {
+        setErrorMEssage("Failed to fetch data. Please try again.");
+        return;
+      }
+      setProduct(response.data);
+      setIsLoading(false);
+    };
+    getProduct();
+  }, []);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProduct({ ...product, [name]: value });
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsAddedProduct(false);
-    const response = await axios.post(baseApi + "products", product);
-
-    if (response.status !== 200) {
-      setErrorMEssage("Failed to save data. Please try again.");
-      return;
-    }
-    setProduct({});
-    setIsloading(false);
-    setIsAddedProduct(true);
-  };
+  const handleSubmit = (e) => {};
+  const { _id, productName, productPrice, productQuantity, productStatus } =
+    product;
   return (
     <div className="container mt-5">
-      {isAddedProduct ? (
-        <div className="alert alert-success" role="alert">
-          Successfully added product.
-        </div>
-      ) : (
-        <div className="alert alert-warning" role="alert">
-          All field is required!
-        </div>
-      )}
+      {" "}
       <form onSubmit={handleSubmit} className="form-control shadow">
         <div className="mb-3">
           <label htmlFor="productName" className="form-label">
@@ -49,7 +41,7 @@ const AddProduct = () => {
           </label>
           <input
             onChange={handleChange}
-            value={product.productName ? product.productName : ""}
+            value={productName}
             type="text"
             className="form-control"
             id="productName"
@@ -62,7 +54,7 @@ const AddProduct = () => {
           </label>
           <input
             onChange={handleChange}
-            value={product.productPrice ? product.productPrice : ""}
+            value={productPrice}
             type="number"
             min={1}
             className="form-control"
@@ -76,7 +68,7 @@ const AddProduct = () => {
           </label>
           <input
             onChange={handleChange}
-            value={product.productQuantity ? product.productQuantity : ""}
+            value={productQuantity}
             type="number"
             min={1}
             className="form-control"
@@ -90,7 +82,7 @@ const AddProduct = () => {
             Back to Lists
           </Link>
           <button className="btn btn-primary" type="submit">
-            Submit
+            Update
           </button>
         </div>
       </form>
@@ -98,4 +90,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default EditProduct;

@@ -3,7 +3,7 @@ import axios from "axios";
 import runningPikachu from "../../assets/pikachu-running.gif";
 import { Link } from "react-router-dom";
 
-const HomeProducts = () => {
+const HomeProduct = () => {
   const baseApi = import.meta.env.VITE_BASE_API;
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -22,8 +22,8 @@ const HomeProducts = () => {
     getAllProducts();
   }, []);
   return (
-    <div className="container">
-      HomeProducts
+    <div className="container mt-5">
+      HomeProduct
       <div className="d-flex justify-content-end mb-3">
         {products[0] ? (
           <Link className="btn btn-info btn-sm" to={"/products/add"}>
@@ -101,4 +101,4 @@ const HomeProducts = () => {
   );
 };
 
-export default HomeProducts;
+export default HomeProduct;
