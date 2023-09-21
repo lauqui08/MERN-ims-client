@@ -89,7 +89,7 @@ const AddProduct = () => {
           <Link to={"/products"} className="mx-3">
             Back to Lists
           </Link>
-          <button className="btn btn-primary" type="submit">
+          <button className="btn btn-info" type="submit">
             Submit
           </button>
         </div>

@@ -63,7 +63,12 @@ const ViewSupplier = () => {
           </h4>
           <div className="text-end mt-3">
             <Link to={"/suppliers"}>Back to Lists</Link>
-            <button className="btn btn-info btn-sm mx-1">Edit</button>
+            <Link
+              className="btn btn-info btn-sm mx-1"
+              to={`/suppliers/${id}/edit`}
+            >
+              Edit
+            </Link>
             <button
               className="btn btn-danger btn-sm"
               onClick={() => {

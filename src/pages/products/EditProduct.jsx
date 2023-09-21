@@ -11,12 +11,13 @@ const EditProduct = () => {
     productStatus: "",
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const getProduct = async () => {
       const response = await axios.get(baseApi + "products/" + id);
       if (response.status !== 200) {
-        setErrorMEssage("Failed to fetch data. Please try again.");
+        setErrorMessage("Failed to fetch data. Please try again.");
         return;
       }
       setProduct(response.data);
@@ -28,7 +29,17 @@ const EditProduct = () => {
     const { name, value } = e.target;
     setProduct({ ...product, [name]: value });
   };
-  const handleSubmit = (e) => {};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const response = await axios.patch(baseApi + "products/" + id, product);
+    if (!response) {
+      setErrorMessage("Failed to fetch data. Please try again.");
+      return;
+    }
+    setIsLoading(false);
+    //redirect to view page
+  };
   const { _id, productName, productPrice, productQuantity, productStatus } =
     product;
   return (
@@ -81,7 +92,7 @@ const EditProduct = () => {
           <Link to={"/products"} className="mx-3">
             Back to Lists
           </Link>
-          <button className="btn btn-primary" type="submit">
+          <button className="btn btn-info" type="submit">
             Update
           </button>
         </div>
