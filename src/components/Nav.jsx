@@ -1,51 +1,81 @@
-import React from "react";
-import { Link } from "react-router-dom";
-const Nav = () => {
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { myContext } from "../context/LoginContext";
+import axios from "axios";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
+const NavigationBar = () => {
+  const navigate = useNavigate();
+  const baseApi = import.meta.env.VITE_BASE_API;
+  const user = JSON.parse(useContext(myContext));
+  const [userInfo, setUserInfo] = useState({});
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const response = await axios.get(
+          baseApi + "users/" + user.email + "/info"
+        );
+        setUserInfo(response.data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    getUserInfo();
+  }, []);
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary shadow">
-      <div className="container-fluid">
-        <a className="navbar-brand" href="#">
-          {"<"}Code{"/>"} De GO Inventory
-        </a>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarText"
-          aria-controls="navbarText"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarText">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <Link className="nav-link text-info" to={"/products"}>
-                Products
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link text-primary" to={"/suppliers"}>
-                Suppliers
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to={"/purchases"}>
-                Purchases
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to={"/orders"}>
-                Orders
-              </Link>
-            </li>
-          </ul>
-          <span className="navbar-text">Welcome Admin</span>
-        </div>
-      </div>
-    </nav>
+    <>
+      <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
+        <Container>
+          <Navbar.Brand href="/">
+            {"<"}Code{"/>"} De GO Inventory
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link href="/products">Products</Nav.Link>
+              <Nav.Link href="/suppliers">Suppliers</Nav.Link>
+              <Nav.Link href="/purchases">Purchases</Nav.Link>
+              <Nav.Link href="/orders">Orders</Nav.Link>
+            </Nav>
+            {user ? (
+              <Nav>
+                <Nav.Link href="#deets" className="text-uppercase">
+                  {userInfo.userType}
+                </Nav.Link>
+                <NavDropdown
+                  title={userInfo.fullname}
+                  id="collapsible-nav-dropdown"
+                >
+                  <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                  <NavDropdown.Item href="#action/3.2">
+                    Another action
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="#action/3.3">
+                    Something
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item
+                    href="/login"
+                    onClick={async () => {
+                      localStorage.removeItem("user");
+                      navigate("/login");
+                    }}
+                  >
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </Nav>
+            ) : (
+              ""
+            )}
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </>
   );
 };
 
-export default Nav;
+export default NavigationBar;

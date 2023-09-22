@@ -20,34 +20,102 @@ import HomeOrder from "./pages/orders/HomeOrder";
 import ViewOrder from "./pages/orders/ViewOrder";
 import EditOrder from "./pages/orders/EditOrder";
 import AddOrder from "./pages/orders/AddOrder";
+//Login Register
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+//dashboard
+import DashBoard from "./DashBoard";
 //page not found
 import PageNotFound from "./pages/PageNotFound";
-
+import { useContext } from "react";
+import { myContext } from "./context/LoginContext";
+import { Navigate } from "react-router-dom";
 function App() {
+  const user = JSON.parse(useContext(myContext));
+  console.log(user);
   return (
     <Router>
       <Nav />
       <Routes>
-        //suppliers
-        <Route path="/suppliers" element={<HomeSupplier />} />
-        <Route path="/suppliers/add" element={<AddSupplier />} />
-        <Route path="/suppliers/:id" element={<ViewSupplier />} />
-        <Route path="/suppliers/:id/edit" element={<EditSupplier />} />
-        //products
-        <Route path="/products" element={<HomeProduct />} />
-        <Route path="/products/add" element={<AddProduct />} />
-        <Route path="/products/:id" element={<ViewProduct />} />
-        <Route path="/products/:id/edit" element={<EditProduct />} />
+        {/* //suppliers */}
+        <Route
+          path="/suppliers"
+          element={user ? <HomeSupplier /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/suppliers/add"
+          element={user ? <AddSupplier /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/suppliers/:id"
+          element={user ? <ViewSupplier /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/suppliers/:id/edit"
+          element={user ? <EditSupplier /> : <Navigate to={"/login"} />}
+        />
+        {/* //products */}
+        <Route
+          path="/products"
+          element={user ? <HomeProduct /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/products/add"
+          element={user ? <AddProduct /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/products/:id"
+          element={user ? <ViewProduct /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/products/:id/edit"
+          element={user ? <EditProduct /> : <Navigate to={"/login"} />}
+        />
         //purchases
-        <Route path="/purchases" element={<HomePurchase />} />
-        <Route path="/purchases/add" element={<AddPurchase />} />
-        <Route path="/purchases/:id" element={<ViewPurchase />} />
-        <Route path="/purchases/:id/receive" element={<ReceivePurchase />} />
-        //orders //purchases
-        <Route path="/orders" element={<HomeOrder />} />
-        <Route path="/orders/add" element={<AddOrder />} />
-        <Route path="/orders/:id" element={<ViewOrder />} />
-        //page not found
+        <Route
+          path="/purchases"
+          element={user ? <HomePurchase /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/purchases/add"
+          element={user ? <AddPurchase /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/purchases/:id"
+          element={user ? <ViewPurchase /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/purchases/:id/receive"
+          element={user ? <ReceivePurchase /> : <Navigate to={"/login"} />}
+        />
+        {/* //orders //purchases */}
+        <Route
+          path="/orders"
+          element={user ? <HomeOrder /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/orders/add"
+          element={user ? <AddOrder /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/orders/:id"
+          element={user ? <ViewOrder /> : <Navigate to={"/login"} />}
+        />
+        {/* //login register */}
+        <Route
+          path="/login"
+          element={user ? <Navigate to={"/"} /> : <Login />}
+        />
+        <Route
+          path="/register"
+          element={user ? <Navigate to={"/"} /> : <Register />}
+        />
+        {/* //dashboard */}
+        <Route
+          path="/"
+          element={user ? <DashBoard /> : <Navigate to={"/login"} />}
+        />
+        {/* //page not found */}
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </Router>
