@@ -26,6 +26,7 @@ function Login() {
         setIsLoading(false);
       } catch (error) {
         console.log(error.message);
+        setIsLoading(false);
       }
     };
     adminCheck();
@@ -42,14 +43,20 @@ function Login() {
       localStorage.setItem("user", JSON.stringify(response.data));
       setIsLoading(false);
     } catch (error) {
-      console.log(error.message);
       setIsLoading(false);
+      console.log(error.message);
     }
   };
   return (
-    <div className="container">
+    <div className="container mt-5">
       {isLoading ? (
-        <img src={runningPikachu} alt="Loading..." />
+        <div className="d-flex justify-content-center">
+          <img
+            style={{ width: "100px" }}
+            src={runningPikachu}
+            alt="Loading..."
+          />
+        </div>
       ) : (
         <Form onSubmit={handleSubmit} className="col-4 shadow p-3">
           <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
