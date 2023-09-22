@@ -58,8 +58,7 @@ const ViewProducts = () => {
             <span className="text-body-secondary">{productQuantity}</span>
           </h4>
           <h4>
-            Contact:{" "}
-            <span className="text-body-secondary">{productStatus}</span>
+            Status: <span className="text-body-secondary">{productStatus}</span>
           </h4>
           <div className="text-end mt-3">
             <Link to={"/products"}>Back to Lists</Link>

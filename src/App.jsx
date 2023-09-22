@@ -14,6 +14,12 @@ import EditProduct from "./pages/products/EditProduct";
 import HomePurchase from "./pages/purchases/HomePurchase";
 import AddPurchase from "./pages/purchases/AddPurchase";
 import ViewPurchase from "./pages/purchases/ViewPurchase";
+import ReceivePurchase from "./pages/purchases/ReceivePurchase";
+//orders
+import HomeOrder from "./pages/orders/HomeOrder";
+import ViewOrder from "./pages/orders/ViewOrder";
+import EditOrder from "./pages/orders/EditOrder";
+import AddOrder from "./pages/orders/AddOrder";
 //page not found
 import PageNotFound from "./pages/PageNotFound";
 
@@ -36,6 +42,11 @@ function App() {
         <Route path="/purchases" element={<HomePurchase />} />
         <Route path="/purchases/add" element={<AddPurchase />} />
         <Route path="/purchases/:id" element={<ViewPurchase />} />
+        <Route path="/purchases/:id/receive" element={<ReceivePurchase />} />
+        //orders //purchases
+        <Route path="/orders" element={<HomeOrder />} />
+        <Route path="/orders/add" element={<AddOrder />} />
+        <Route path="/orders/:id" element={<ViewOrder />} />
         //page not found
         <Route path="*" element={<PageNotFound />} />
       </Routes>

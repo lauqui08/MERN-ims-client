@@ -5,7 +5,7 @@ const Nav = () => {
     <nav className="navbar navbar-expand-lg bg-body-tertiary shadow">
       <div className="container-fluid">
         <a className="navbar-brand" href="#">
-          Lauqui Inventory
+          {"<"}Code{"/>"} De GO Inventory
         </a>
         <button
           className="navbar-toggler"
@@ -33,6 +33,11 @@ const Nav = () => {
             <li className="nav-item">
               <Link className="nav-link" to={"/purchases"}>
                 Purchases
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to={"/orders"}>
+                Orders
               </Link>
             </li>
           </ul>

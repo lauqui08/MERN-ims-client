@@ -21,26 +21,37 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsAddedProduct(false);
-    const response = await axios.post(baseApi + "products", product);
-
-    if (response.status !== 200) {
-      setErrorMEssage("Failed to save data. Please try again.");
-      return;
+    setErrorMEssage("");
+    try {
+      const response = await axios.post(baseApi + "products", product);
+      setProduct({
+        productName: "",
+        productPrice: "",
+        productQuantity: "",
+      });
+      setIsloading(false);
+      setIsAddedProduct(true);
+    } catch (error) {
+      console.log(error.message);
+      setErrorMEssage("All field is required.");
     }
-    setProduct({});
-    setIsloading(false);
-    setIsAddedProduct(true);
   };
   return (
     <div className="container mt-5">
+      AddProduct
       {isAddedProduct ? (
         <div className="alert alert-success" role="alert">
           Successfully added product.
         </div>
       ) : (
+        ""
+      )}
+      {errorMessage ? (
         <div className="alert alert-warning" role="alert">
-          All field is required!
+          {errorMessage}
         </div>
+      ) : (
+        ""
       )}
       <form onSubmit={handleSubmit} className="form-control shadow">
         <div className="mb-3">
@@ -49,7 +60,7 @@ const AddProduct = () => {
           </label>
           <input
             onChange={handleChange}
-            value={product.productName ? product.productName : ""}
+            value={product.productName}
             type="text"
             className="form-control"
             id="productName"
@@ -62,7 +73,7 @@ const AddProduct = () => {
           </label>
           <input
             onChange={handleChange}
-            value={product.productPrice ? product.productPrice : ""}
+            value={product.productPrice}
             type="number"
             min={1}
             className="form-control"
@@ -76,7 +87,7 @@ const AddProduct = () => {
           </label>
           <input
             onChange={handleChange}
-            value={product.productQuantity ? product.productQuantity : ""}
+            value={product.productQuantity}
             type="number"
             min={1}
             className="form-control"

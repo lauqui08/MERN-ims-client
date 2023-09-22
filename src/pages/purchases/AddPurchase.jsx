@@ -12,7 +12,7 @@ const AddPurchase = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [isLoading, setIsloading] = useState(true);
   const [errorMessage, setErrorMEssage] = useState("");
-  const [isAddedPurchase, setIsAddedPurchase] = useState(Boolean);
+  const [isAddedPurchase, setIsAddedPurchase] = useState(false);
   useEffect(() => {
     const getAllSuppliers = async () => {
       const response = await axios.get(baseApi + "suppliers");
@@ -31,33 +31,49 @@ const AddPurchase = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await axios.post(baseApi + "purchases", purchase);
-    if (!response) {
-      setErrorMEssage("Failed to save data. Please try again.");
-      return;
+    setErrorMEssage("");
+    try {
+      const response = await axios.post(baseApi + "purchases", purchase);
+      setPurchase({
+        supplier: {},
+        product: {},
+        quantity: "",
+      });
+      setIsloading(false);
+      setIsAddedPurchase(true);
+    } catch (error) {
+      console.log(error.response.data.error);
+      setErrorMEssage(error.response.data.error);
     }
-    setPurchase({
-      supplier: {},
-      product: {},
-      quantity: "",
-    });
-    setIsloading(false);
-    setIsAddedPurchase(true);
   };
-  console.log(purchase);
   return (
     <div className="container mt-5">
       AddPurchase
+      {errorMessage ? (
+        <div className="alert alert-warning" role="alert">
+          All field is required.
+        </div>
+      ) : (
+        ""
+      )}
+      {isAddedPurchase ? (
+        <div className="alert alert-success" role="alert">
+          Successfully added purchase.
+        </div>
+      ) : (
+        ""
+      )}
       <form onSubmit={handleSubmit} className="form-control shadow">
         <div className="mb-3">
           <label htmlFor="product" className="form-label">
             Select Product
           </label>
           <select
-            className="form-select form-select-lg mb-3"
+            className="form-select mb-3"
             id="product"
             name="product"
             onChange={handleChange}
+            value={purchase.product}
           >
             <option>Open this to select Product</option>
             {products.map((product) => {
@@ -75,10 +91,11 @@ const AddPurchase = () => {
             Select Supplier
           </label>
           <select
-            className="form-select form-select-lg mb-3"
+            className="form-select mb-3"
             id="supplier"
             name="supplier"
             onChange={handleChange}
+            value={purchase.supplier}
           >
             <option>Open this to select Supplier</option>
             {suppliers.map((supplier) => {
@@ -102,6 +119,7 @@ const AddPurchase = () => {
             className="form-control"
             id="quantity"
             name="quantity"
+            value={purchase.quantity}
           />
         </div>
         <div className="text-end">

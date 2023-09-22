@@ -22,15 +22,21 @@ const AddSupplier = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsAddedSupplier(false);
-    const response = await axios.post(baseApi + "suppliers", supplier);
-
-    if (response.status !== 200) {
-      setErrorMEssage("Failed to save data. Please try again.");
-      return;
+    setErrorMEssage("");
+    try {
+      const response = await axios.post(baseApi + "suppliers", supplier);
+      setSupplier({
+        supplierName: "",
+        supplierAddress: "",
+        supplierEmail: "",
+        supplierContact: "",
+      });
+      setIsloading(false);
+      setIsAddedSupplier(true);
+    } catch (error) {
+      console.log(error.message);
+      setErrorMEssage(error.response.data.error);
     }
-    setSupplier({});
-    setIsloading(false);
-    setIsAddedSupplier(true);
   };
   return (
     <div className="container mt-5">
@@ -39,9 +45,14 @@ const AddSupplier = () => {
           Successfully added supplier.
         </div>
       ) : (
+        ""
+      )}
+      {errorMessage ? (
         <div className="alert alert-warning" role="alert">
-          All field is required!
+          {errorMessage}
         </div>
+      ) : (
+        ""
       )}
       <form onSubmit={handleSubmit} className="form-control shadow">
         <div className="mb-3">
@@ -50,7 +61,7 @@ const AddSupplier = () => {
           </label>
           <input
             onChange={handleChange}
-            value={supplier.supplierName ? supplier.supplierName : ""}
+            value={supplier.supplierName}
             type="text"
             className="form-control"
             id="supplierName"
@@ -63,7 +74,7 @@ const AddSupplier = () => {
           </label>
           <input
             onChange={handleChange}
-            value={supplier.supplierEmail ? supplier.supplierEmail : ""}
+            value={supplier.supplierEmail}
             type="email"
             className="form-control"
             id="supplierEmail"
@@ -76,7 +87,7 @@ const AddSupplier = () => {
           </label>
           <input
             onChange={handleChange}
-            value={supplier.supplierContact ? supplier.supplierContact : ""}
+            value={supplier.supplierContact}
             type="text"
             className="form-control"
             id="supplierContact"
@@ -93,7 +104,7 @@ const AddSupplier = () => {
             id="supplierAddress"
             name="supplierAddress"
             rows="3"
-            value={supplier.supplierAddress ? supplier.supplierAddress : ""}
+            value={supplier.supplierAddress}
           ></textarea>
         </div>
         <div className="text-end">
