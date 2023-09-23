@@ -29,50 +29,52 @@ const NavigationBar = () => {
     <>
       <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
         <Container>
-          <Navbar.Brand onClick={() => navigate("/")}>
+          <Link to={"/"} className="navbar-brand">
             {"<"}Code{"/>"} De GO Inventory
-          </Navbar.Brand>
+          </Link>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link onClick={() => navigate("/products")}>
-                Products
-              </Nav.Link>
-              <Nav.Link onClick={() => navigate("/suppliers")}>
-                Suppliers
-              </Nav.Link>
-              <Nav.Link onClick={() => navigate("/purchases")}>
-                Purchases
-              </Nav.Link>
-              <Nav.Link onClick={() => navigate("/orders")}>Orders</Nav.Link>
-            </Nav>
             {user ? (
-              <Nav>
-                <Nav.Link href="#deets" className="text-uppercase">
-                  {userInfo.userType}
-                </Nav.Link>
-                <NavDropdown
-                  title={userInfo.fullname}
-                  id="collapsible-nav-dropdown"
-                >
-                  <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.2">
-                    Another action
-                  </NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.3">
-                    Something
-                  </NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item
-                    onClick={() => {
-                      localStorage.removeItem("user");
-                      navigate("/login");
-                    }}
+              <>
+                <Nav className="me-auto">
+                  <Link to={"/products"} className="nav-link">
+                    Products
+                  </Link>
+
+                  <Link to={"/suppliers"} className="nav-link">
+                    Suppliers
+                  </Link>
+                  <Link to={"/purchases"} className="nav-link">
+                    Purchases
+                  </Link>
+                  <Link to={"/orders"} className="nav-link">
+                    Orders
+                  </Link>
+                </Nav>
+
+                <Nav>
+                  <Nav.Link className="text-uppercase">
+                    {userInfo.userType}
+                  </Nav.Link>
+                  <NavDropdown
+                    title={userInfo.fullname}
+                    id="collapsible-nav-dropdown"
                   >
-                    Logout
-                  </NavDropdown.Item>
-                </NavDropdown>
-              </Nav>
+                    <NavDropdown.Item>Action</NavDropdown.Item>
+                    <NavDropdown.Item>Another action</NavDropdown.Item>
+                    <NavDropdown.Item>Something</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item
+                      onClick={() => {
+                        localStorage.removeItem("user");
+                        window.location.reload();
+                      }}
+                    >
+                      Logout
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                </Nav>
+              </>
             ) : (
               ""
             )}

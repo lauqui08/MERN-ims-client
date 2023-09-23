@@ -9,7 +9,7 @@ const HomePurchase = () => {
   const [purchases, setPurchases] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMEssage] = useState("");
-
+  const [searchBy, setSearchBy] = useState("supplier.supplierName");
   useEffect(() => {
     const getAllPurchases = async () => {
       const response = await axios.get(baseApi + "purchases");
@@ -46,17 +46,56 @@ const HomePurchase = () => {
       setIsLoading(false);
     }
   };
+  const handleChange = async (e) => {
+    if (!e.target.value) {
+      const response = await axios.get(baseApi + "purchases");
+      return setPurchases(response.data);
+    } else {
+      const response = await axios.get(
+        baseApi + "purchases/" + searchBy + "/" + e.target.value + "/search"
+      );
+      setPurchases(response.data);
+    }
+  };
   return (
     <div className="container mt-5">
       HomePurchase
       <div className="d-flex justify-content-end mb-3">
-        {purchases[0] ? (
-          <Link className="btn btn-info btn-sm" to={"/purchases/add"}>
-            Add Purchase
-          </Link>
-        ) : (
-          ""
-        )}
+        <Link className="btn btn-info btn-sm" to={"/purchases/add"}>
+          Add Purchase
+        </Link>
+      </div>
+      <div className="mb-2">
+        <form className="row row-cols-lg-auto g-3 align-items-center">
+          <div className="col-12">
+            <label className="visually-hidden" htmlFor="searchBy">
+              Search By
+            </label>
+            <div className="input-group">
+              <div className="input-group-text bg-success">Search By :</div>
+              <select
+                onChange={(e) => setSearchBy(e.target.value)}
+                className="form-select"
+                id="searchBy"
+              >
+                <option value="supplier.supplierName">Supplier</option>
+                <option value="product.productName">Product</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="col-12">
+            <label className="visually-hidden" htmlFor="query">
+              Query
+            </label>
+            <input
+              onChange={handleChange}
+              type="search"
+              className="form-control"
+              id="query"
+            />
+          </div>
+        </form>
       </div>
       {isLoading ? (
         <div className="d-flex justify-content-center">
@@ -84,34 +123,8 @@ const HomePurchase = () => {
                   ({ _id, supplier, product, quantity, purchaseStatus }) => {
                     return (
                       <tr key={_id}>
-                        <td>
-                          <Accordion>
-                            <Accordion.Item eventKey="0">
-                              <Accordion.Header>
-                                {supplier.supplierName}
-                              </Accordion.Header>
-                              <Accordion.Body>
-                                <p>Address: {supplier.supplierAddress}</p>
-                                <p>Email: {supplier.supplierEmail}</p>
-                                <p>contact: {supplier.supplierContact}</p>
-                              </Accordion.Body>
-                            </Accordion.Item>
-                          </Accordion>
-                        </td>
-                        <td>
-                          <Accordion>
-                            <Accordion.Item eventKey="0">
-                              <Accordion.Header>
-                                {product.productName}
-                              </Accordion.Header>
-                              <Accordion.Body>
-                                <p>Price: {product.productPrice}</p>
-                                <p>Stock: {product.productQuantity}</p>
-                                <p>Status: {product.productStatus}</p>
-                              </Accordion.Body>
-                            </Accordion.Item>
-                          </Accordion>
-                        </td>
+                        <td>{supplier.supplierName}</td>
+                        <td>{product.productName}</td>
                         <td>{quantity}</td>
                         <td>{purchaseStatus}</td>
 
@@ -164,13 +177,8 @@ const HomePurchase = () => {
                 )
               ) : (
                 <tr>
-                  <td className=" text-center" colSpan="4">
+                  <td className=" text-center" colSpan="5">
                     No Record Found!
-                  </td>
-                  <td className="text-center">
-                    <Link className="btn btn-info btn-sm" to={"/purchases/add"}>
-                      Add Purchase
-                    </Link>
                   </td>
                 </tr>
               )}

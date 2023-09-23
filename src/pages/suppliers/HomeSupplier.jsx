@@ -7,7 +7,7 @@ const HomeSupplier = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [isLoading, setIsloading] = useState(true);
   const [errorMessage, setErrorMEssage] = useState("");
-
+  const [searchBy, setSearchBy] = useState("supplierName");
   useEffect(() => {
     const getAllSuppliers = async () => {
       const response = await axios.get(baseApi + "suppliers");
@@ -20,17 +20,57 @@ const HomeSupplier = () => {
     };
     getAllSuppliers();
   }, []);
+  const handleChange = async (e) => {
+    if (!e.target.value) {
+      const response = await axios.get(baseApi + "suppliers");
+      return setSuppliers(response.data);
+    } else {
+      const response = await axios.get(
+        baseApi + "suppliers/" + searchBy + "/" + e.target.value + "/search"
+      );
+      setSuppliers(response.data);
+    }
+  };
   return (
     <div className="container mt-5">
       HomeSupplier
       <div className="d-flex justify-content-end mb-3">
-        {suppliers[0] ? (
-          <Link className="btn btn-primary btn-sm" to={"/suppliers/add"}>
-            Add Supplier
-          </Link>
-        ) : (
-          ""
-        )}
+        <Link className="btn btn-info btn-sm" to={"/suppliers/add"}>
+          Add Supplier
+        </Link>
+      </div>
+      <div className="mb-2">
+        <form className="row row-cols-lg-auto g-3 align-items-center">
+          <div className="col-12">
+            <label className="visually-hidden" htmlFor="searchBy">
+              Search By
+            </label>
+            <div className="input-group">
+              <div className="input-group-text bg-success">Search By :</div>
+              <select
+                onChange={(e) => setSearchBy(e.target.value)}
+                className="form-select"
+                id="searchBy"
+              >
+                <option value="supplierName">Supplier Name</option>
+                <option value="supplierAddress">Address</option>
+                <option value="supplierEmail">Email</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="col-12">
+            <label className="visually-hidden" htmlFor="query">
+              Query
+            </label>
+            <input
+              onChange={handleChange}
+              type="search"
+              className="form-control"
+              id="query"
+            />
+          </div>
+        </form>
       </div>
       {isLoading ? (
         <div className="d-flex justify-content-center">
@@ -44,7 +84,7 @@ const HomeSupplier = () => {
         <div className="table-responsive">
           <table className="table table-hover table-bordered table-sm">
             <thead>
-              <tr className="table-primary">
+              <tr className="table-info">
                 <th>Supplier Name</th>
                 <th>Address</th>
                 <th>Email</th>
@@ -70,7 +110,7 @@ const HomeSupplier = () => {
                         <td>{supplierContact}</td>
                         <td className=" text-center">
                           <Link
-                            className="btn btn-primary btn-sm"
+                            className="btn btn-info btn-sm"
                             to={`/suppliers/${_id}`}
                           >
                             View
@@ -82,16 +122,8 @@ const HomeSupplier = () => {
                 )
               ) : (
                 <tr>
-                  <td className=" text-center" colSpan="4">
+                  <td className=" text-center" colSpan="5">
                     No Record Found!
-                  </td>
-                  <td className="text-center">
-                    <Link
-                      className="btn btn-primary btn-sm"
-                      to={"/suppliers/add"}
-                    >
-                      Add Supplier
-                    </Link>
                   </td>
                 </tr>
               )}

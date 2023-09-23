@@ -8,6 +8,7 @@ const HomeProduct = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMEssage] = useState("");
+  const [searchBy, setSearchBy] = useState("productName");
 
   useEffect(() => {
     const getAllProducts = async () => {
@@ -21,17 +22,56 @@ const HomeProduct = () => {
     };
     getAllProducts();
   }, []);
+
+  const handleChange = async (e) => {
+    if (!e.target.value) {
+      const response = await axios.get(baseApi + "products");
+      return setProducts(response.data);
+    } else {
+      const response = await axios.get(
+        baseApi + "products/" + searchBy + "/" + e.target.value + "/search"
+      );
+      setProducts(response.data);
+    }
+  };
   return (
     <div className="container mt-5">
       HomeProduct
       <div className="d-flex justify-content-end mb-3">
-        {products[0] ? (
-          <Link className="btn btn-info btn-sm" to={"/products/add"}>
-            Add Product
-          </Link>
-        ) : (
-          ""
-        )}
+        <Link className="btn btn-info btn-sm" to={"/products/add"}>
+          Add Product
+        </Link>
+      </div>
+      <div className="mb-2">
+        <form className="row row-cols-lg-auto g-3 align-items-center">
+          <div className="col-12">
+            <label className="visually-hidden" htmlFor="searchBy">
+              Search By
+            </label>
+            <div className="input-group">
+              <div className="input-group-text bg-success">Search By :</div>
+              <select
+                onChange={(e) => setSearchBy(e.target.value)}
+                className="form-select"
+                id="searchBy"
+              >
+                <option value="productName">Product Name</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="col-12">
+            <label className="visually-hidden" htmlFor="query">
+              Query
+            </label>
+            <input
+              onChange={handleChange}
+              type="search"
+              className="form-control"
+              id="query"
+            />
+          </div>
+        </form>
       </div>
       {isLoading ? (
         <div className="d-flex justify-content-center">
@@ -83,13 +123,8 @@ const HomeProduct = () => {
                 )
               ) : (
                 <tr>
-                  <td className=" text-center" colSpan="4">
+                  <td className=" text-center" colSpan="5">
                     No Record Found!
-                  </td>
-                  <td className="text-center">
-                    <Link className="btn btn-info btn-sm" to={"/products/add"}>
-                      Add Product
-                    </Link>
                   </td>
                 </tr>
               )}

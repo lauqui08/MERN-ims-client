@@ -9,7 +9,7 @@ import { myContext } from "../context/LoginContext";
 import { Link } from "react-router-dom";
 function Login() {
   const user = useContext(myContext);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [checkAdmin, setCheckAdmin] = useState([]);
   const baseApi = import.meta.env.VITE_BASE_API;
   const [login, setLogin] = useState({
@@ -18,7 +18,7 @@ function Login() {
   });
 
   useEffect(() => {
-    setIsLoading(true);
+    setIsLoading(false);
     const adminCheck = async () => {
       try {
         const response = await axios.get(baseApi + "users/checkAdmin");
@@ -42,6 +42,7 @@ function Login() {
       const response = await axios.post(baseApi + "users/login", { ...login });
       localStorage.setItem("user", JSON.stringify(response.data));
       setIsLoading(false);
+      window.location.reload();
     } catch (error) {
       setIsLoading(false);
       console.log(error.message);

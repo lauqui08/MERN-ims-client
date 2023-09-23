@@ -8,7 +8,7 @@ const HomeOrder = () => {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMEssage] = useState("");
-
+  const [searchBy, setSearchBy] = useState("customerName");
   useEffect(() => {
     const getAllOrders = async () => {
       const response = await axios.get(baseApi + "orders");
@@ -56,17 +56,59 @@ const HomeOrder = () => {
       }
     );
   };
+
+  const handleChange = async (e) => {
+    if (!e.target.value) {
+      const response = await axios.get(baseApi + "orders");
+      return setOrders(response.data);
+    } else {
+      const response = await axios.get(
+        baseApi + "orders/" + searchBy + "/" + e.target.value + "/search"
+      );
+      setOrders(response.data);
+    }
+  };
+
   return (
     <div className="container mt-5">
       HomeOrder
       <div className="d-flex justify-content-end mb-3">
-        {orders[0] ? (
-          <Link className="btn btn-info btn-sm" to={"/orders/add"}>
-            Add Order
-          </Link>
-        ) : (
-          ""
-        )}
+        <Link className="btn btn-info btn-sm" to={"/orders/add"}>
+          Add Order
+        </Link>
+      </div>
+      <div className="mb-2">
+        <form className="row row-cols-lg-auto g-3 align-items-center">
+          <div className="col-12">
+            <label className="visually-hidden" htmlFor="searchBy">
+              Search By
+            </label>
+            <div className="input-group">
+              <div className="input-group-text bg-success">Search By :</div>
+              <select
+                onChange={(e) => setSearchBy(e.target.value)}
+                className="form-select"
+                id="searchBy"
+              >
+                <option value="customerName">Customer Name</option>
+                <option value="orderNumber">Order Number</option>
+                <option value="product">Product</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="col-12">
+            <label className="visually-hidden" htmlFor="query">
+              Query
+            </label>
+            <input
+              type="search"
+              className="form-control"
+              id="query"
+              onChange={handleChange}
+            />
+          </div>
+        </form>
       </div>
       {isLoading ? (
         <div className="d-flex justify-content-center">
@@ -77,7 +119,7 @@ const HomeOrder = () => {
           />
         </div>
       ) : (
-        <div className="table-responsive shadow">
+        <div className="table-responsive">
           <table className="table table-hover table-bordered table-sm">
             <thead>
               <tr className="table-info">
@@ -105,25 +147,33 @@ const HomeOrder = () => {
                         <td>{customerName}</td>
                         <td>{product}</td>
                         <td>{quantity}</td>
-                        <td>{price}</td>
+                        <td>₱{price}</td>
                         <td>{orderStatus}</td>
                         <td className=" text-center">
-                          {orderStatus === "pending" && (
+                          {orderStatus === "pending" ? (
+                            <>
+                              <Link
+                                onClick={() => cancelOrder(_id)}
+                                className="btn btn-danger btn-sm mx-1"
+                              >
+                                Cancel
+                              </Link>
+
+                              <Link
+                                onClick={() =>
+                                  checkOutOrder(_id, product, quantity)
+                                }
+                                className="btn btn-primary btn-sm mx-1"
+                              >
+                                Checkout
+                              </Link>
+                            </>
+                          ) : (
                             <Link
-                              onClick={() => cancelOrder(_id)}
-                              className="btn btn-danger btn-sm mx-1"
+                              to={`/orders/${_id}`}
+                              className="btn btn-secondary btn-sm"
                             >
-                              Cancel
-                            </Link>
-                          )}
-                          {orderStatus === "pending" && (
-                            <Link
-                              onClick={() =>
-                                checkOutOrder(_id, product, quantity)
-                              }
-                              className="btn btn-primary btn-sm mx-1"
-                            >
-                              Checkout
+                              Print Preview
                             </Link>
                           )}
                         </td>
@@ -133,13 +183,8 @@ const HomeOrder = () => {
                 )
               ) : (
                 <tr>
-                  <td className=" text-center" colSpan="4">
+                  <td className=" text-center" colSpan="6">
                     No Record Found!
-                  </td>
-                  <td className="text-center">
-                    <Link className="btn btn-info btn-sm" to={"/orders/add"}>
-                      Add Order
-                    </Link>
                   </td>
                 </tr>
               )}
