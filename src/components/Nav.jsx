@@ -29,16 +29,22 @@ const NavigationBar = () => {
     <>
       <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
         <Container>
-          <Navbar.Brand href="/">
+          <Navbar.Brand onClick={() => navigate("/")}>
             {"<"}Code{"/>"} De GO Inventory
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="/products">Products</Nav.Link>
-              <Nav.Link href="/suppliers">Suppliers</Nav.Link>
-              <Nav.Link href="/purchases">Purchases</Nav.Link>
-              <Nav.Link href="/orders">Orders</Nav.Link>
+              <Nav.Link onClick={() => navigate("/products")}>
+                Products
+              </Nav.Link>
+              <Nav.Link onClick={() => navigate("/suppliers")}>
+                Suppliers
+              </Nav.Link>
+              <Nav.Link onClick={() => navigate("/purchases")}>
+                Purchases
+              </Nav.Link>
+              <Nav.Link onClick={() => navigate("/orders")}>Orders</Nav.Link>
             </Nav>
             {user ? (
               <Nav>
@@ -58,8 +64,7 @@ const NavigationBar = () => {
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item
-                    href="/login"
-                    onClick={async () => {
+                    onClick={() => {
                       localStorage.removeItem("user");
                       navigate("/login");
                     }}
