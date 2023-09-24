@@ -35,7 +35,7 @@ const NavigationBar = () => {
       <Navbar collapseOnSelect expand="lg" className="bg-body-secondary">
         <Container>
           <Link to={"/"} className="navbar-brand">
-            {"<"}Code{"/>"} De GO Inventory
+            {"<"}Code{"/>"} De GO
           </Link>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">

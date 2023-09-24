@@ -285,7 +285,7 @@ function App() {
               getUser.userType == "admin" ? (
                 <HomeUser />
               ) : (
-                <Navigate to={"/users"} />
+                <Navigate to={"/"} />
               )
             ) : (
               <Navigate to={"/login"} />

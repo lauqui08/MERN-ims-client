@@ -12,7 +12,7 @@ const EditSupplier = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
-  const [isUpdatedSupplier, setIsUpdatedSupplier] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   useEffect(() => {
     const getSuppplier = async () => {
       const response = await axios.get(baseApi + "suppliers/" + id);
@@ -32,28 +32,35 @@ const EditSupplier = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    const response = await axios.patch(baseApi + "suppliers/" + id, supplier);
-    if (!response) {
-      setErrorMessage("Failed to fetch data. Please try again.");
-      return;
+    try {
+      const response = await axios.patch(baseApi + "suppliers/" + id, supplier);
+
+      setIsLoading(false);
+      setSuccessMessage(response.data.message);
+    } catch (error) {
+      setErrorMessage(error.response.data.error);
     }
-    setIsLoading(false);
-    setIsUpdatedSupplier(true);
+
     //redirect to view page
   };
   const { supplierName, supplierEmail, supplierContact, supplierAddress } =
     supplier;
   return (
     <div className="container mt-5">
-      EditSupplier
-      {isUpdatedSupplier ? (
+      <h4>Edit Supplier</h4>
+      {successMessage ? (
         <div className="alert alert-success" role="alert">
-          Successfully updated supplier.
+          {successMessage}
         </div>
       ) : (
-        <div className="alert alert-warning" role="alert">
-          All field is required!
+        ""
+      )}
+      {errorMessage ? (
+        <div className="alert alert-danger" role="alert">
+          {errorMessage}
         </div>
+      ) : (
+        ""
       )}
       <form onSubmit={handleSubmit} className="form-control shadow">
         <div className="mb-3">

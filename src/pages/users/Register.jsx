@@ -74,7 +74,7 @@ const Register = () => {
           />
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="form-control p-5">
+        <form onSubmit={handleSubmit} className="form-control p-3">
           <div className="mb-3">
             <label htmlFor="userType" className="form-label">
               Select Account Type
@@ -86,7 +86,7 @@ const Register = () => {
               onChange={handleChange}
               value={registration.userType}
             >
-              <option>Open this to select Product</option>
+              <option>Open this to select</option>
               <option value="admin">Admin</option>
               <option value="cashier">Cashier</option>
               <option value="inventory">Inventory Custodian</option>

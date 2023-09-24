@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import runningPikachu from "../../assets/pikachu-running.gif";
 import { Link } from "react-router-dom";
-
+import { myContext } from "../../context/LoginContext";
 const HomeUser = () => {
+  const user = JSON.parse(useContext(myContext));
   const baseApi = import.meta.env.VITE_BASE_API;
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMEssage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [searchBy, setSearchBy] = useState("fullname");
 
   useEffect(() => {
@@ -21,7 +23,7 @@ const HomeUser = () => {
       setIsLoading(false);
     };
     getAllUsers();
-  }, []);
+  }, [successMessage]);
 
   const handleChange = async (e) => {
     if (!e.target.value) {
@@ -34,17 +36,51 @@ const HomeUser = () => {
       setUsers(response.data);
     }
   };
-  const handleActivate = async () => {
-    // const confirmation = confirm("Are you sure you want to Activate.");
-  };
-  const handleDeactivate = async (fullname, userType) => {
+  const handleUserStatus = async (id, fullname, userType, accountStatus) => {
+    setSuccessMessage("");
+    setErrorMEssage("");
     const confirmation = confirm(
       `Are you sure you want to Deactivate ${fullname} with Account Type ${userType}`
     );
+    if (confirmation) {
+      if (accountStatus === "active") {
+        try {
+          const response = await axios.patch(baseApi + "users/" + id, {
+            accountStatus: "deactivated",
+          });
+          setSuccessMessage(response.data.message);
+        } catch (error) {
+          setErrorMEssage(error.response.data.error);
+        }
+      } else {
+        try {
+          const response = await axios.patch(baseApi + "users/" + id, {
+            accountStatus: "active",
+          });
+          setSuccessMessage(response.data.message);
+        } catch (error) {
+          setErrorMEssage(error.response.data.error);
+        }
+      }
+    }
   };
   return (
     <div className="container mt-5">
       <h4>USers</h4>
+      {errorMessage ? (
+        <div className="alert alert-warning" role="alert">
+          {errorMessage}
+        </div>
+      ) : (
+        ""
+      )}
+      {successMessage ? (
+        <div className="alert alert-success" role="alert">
+          {successMessage}
+        </div>
+      ) : (
+        ""
+      )}
       <div className="d-flex justify-content-end mb-3">
         <Link className="btn btn-info btn-sm" to={"/register"}>
           Register
@@ -115,24 +151,31 @@ const HomeUser = () => {
                         <td>{userType}</td>
                         <td>{accountStatus}</td>
                         <td className=" text-center">
-                          {accountStatus === "active" ? (
-                            <Link
-                              className="btn btn-danger btn-sm"
-                              to={`/users/${_id}`}
-                              onClick={() =>
-                                handleDeactivate(fullname, userType)
-                              }
-                            >
-                              Deactivate
-                            </Link>
-                          ) : (
-                            <Link
-                              className="btn btn-info btn-sm"
-                              to={`/users/${_id}`}
-                            >
-                              Activate
-                            </Link>
-                          )}
+                          <form
+                            onSubmit={(e) => {
+                              e.preventDefault();
+                              handleUserStatus(
+                                _id,
+                                fullname,
+                                userType,
+                                accountStatus,
+                                email
+                              );
+                            }}
+                          >
+                            {accountStatus === "active" ? (
+                              <button
+                                className="btn btn-danger btn-sm"
+                                disabled={email === user.email ? true : false}
+                              >
+                                Deactivate
+                              </button>
+                            ) : (
+                              <button className="btn btn-info btn-sm">
+                                Activate
+                              </button>
+                            )}
+                          </form>
                         </td>
                       </tr>
                     );
