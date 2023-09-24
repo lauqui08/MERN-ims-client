@@ -42,47 +42,59 @@ const NavigationBar = () => {
             {user ? (
               <>
                 <Nav className="me-auto">
-                  <Link
-                    to={"/products"}
-                    className={`nav-link ${
-                      location.pathname.includes("products")
-                        ? "text-primary fw-bolder"
-                        : ""
-                    }`}
-                  >
-                    Products
-                  </Link>
-
-                  <Link
-                    to={"/suppliers"}
-                    className={`nav-link ${
-                      location.pathname.includes("suppliers")
-                        ? "text-primary fw-bolder"
-                        : ""
-                    }`}
-                  >
-                    Suppliers
-                  </Link>
-                  <Link
-                    to={"/purchases"}
-                    className={`nav-link ${
-                      location.pathname.includes("purchases")
-                        ? "text-primary fw-bolder"
-                        : ""
-                    }`}
-                  >
-                    Purchases
-                  </Link>
-                  <Link
-                    to={"/orders"}
-                    className={`nav-link ${
-                      location.pathname.includes("orders")
-                        ? "text-primary fw-bolder"
-                        : ""
-                    }`}
-                  >
-                    Orders
-                  </Link>
+                  {userInfo.userType == "admin" ||
+                  userInfo.userType == "inventory" ? (
+                    <>
+                      {" "}
+                      <Link
+                        to={"/products"}
+                        className={`nav-link ${
+                          location.pathname.includes("products")
+                            ? "text-primary fw-bolder"
+                            : ""
+                        }`}
+                      >
+                        Products
+                      </Link>
+                      <Link
+                        to={"/suppliers"}
+                        className={`nav-link ${
+                          location.pathname.includes("suppliers")
+                            ? "text-primary fw-bolder"
+                            : ""
+                        }`}
+                      >
+                        Suppliers
+                      </Link>
+                      <Link
+                        to={"/purchases"}
+                        className={`nav-link ${
+                          location.pathname.includes("purchases")
+                            ? "text-primary fw-bolder"
+                            : ""
+                        }`}
+                      >
+                        Purchases
+                      </Link>
+                    </>
+                  ) : (
+                    ""
+                  )}
+                  {userInfo.userType == "admin" ||
+                  userInfo.userType == "cashier" ? (
+                    <Link
+                      to={"/orders"}
+                      className={`nav-link ${
+                        location.pathname.includes("orders")
+                          ? "text-primary fw-bolder"
+                          : ""
+                      }`}
+                    >
+                      Orders
+                    </Link>
+                  ) : (
+                    ""
+                  )}
                 </Nav>
 
                 <Nav>

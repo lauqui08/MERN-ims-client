@@ -60,66 +60,216 @@ function App() {
         {/* //suppliers */}
         <Route
           path="/suppliers"
-          element={user ? <HomeSupplier /> : <Navigate to={"/login"} />}
+          element={
+            user ? (
+              getUser.userType == "admin" || getUser.userType == "inventory" ? (
+                <HomeSupplier />
+              ) : (
+                <Navigate to={"/orders"} />
+              )
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
         />
         <Route
           path="/suppliers/add"
-          element={user ? <AddSupplier /> : <Navigate to={"/login"} />}
+          element={
+            user ? (
+              getUser.userType == "admin" || getUser.userType == "inventory" ? (
+                <AddSupplier />
+              ) : (
+                <Navigate to={"/orders"} />
+              )
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
         />
         <Route
           path="/suppliers/:id"
-          element={user ? <ViewSupplier /> : <Navigate to={"/login"} />}
+          element={
+            user ? (
+              getUser.userType == "admin" || getUser.userType == "inventory" ? (
+                <ViewSupplier />
+              ) : (
+                <Navigate to={"/orders"} />
+              )
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
         />
         <Route
           path="/suppliers/:id/edit"
-          element={user ? <EditSupplier /> : <Navigate to={"/login"} />}
+          element={
+            user ? (
+              getUser.userType == "admin" || getUser.userType == "inventory" ? (
+                <EditSupplier />
+              ) : (
+                <Navigate to={"/orders"} />
+              )
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
         />
         {/* //products */}
         <Route
           path="/products"
-          element={user ? <HomeProduct /> : <Navigate to={"/login"} />}
+          element={
+            user ? (
+              getUser.userType == "admin" || getUser.userType == "inventory" ? (
+                <HomeProduct />
+              ) : (
+                <Navigate to={"/orders"} />
+              )
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
         />
         <Route
           path="/products/add"
-          element={user ? <AddProduct /> : <Navigate to={"/login"} />}
+          element={
+            user ? (
+              getUser.userType == "admin" || getUser.userType == "inventory" ? (
+                <AddProduct />
+              ) : (
+                <Navigate to={"/orders"} />
+              )
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
         />
         <Route
           path="/products/:id"
-          element={user ? <ViewProduct /> : <Navigate to={"/login"} />}
+          element={
+            user ? (
+              getUser.userType == "admin" || getUser.userType == "inventory" ? (
+                <ViewProduct />
+              ) : (
+                <Navigate to={"/orders"} />
+              )
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
         />
         <Route
           path="/products/:id/edit"
-          element={user ? <EditProduct /> : <Navigate to={"/login"} />}
+          element={
+            user ? (
+              getUser.userType == "admin" || getUser.userType == "inventory" ? (
+                <EditProduct />
+              ) : (
+                <Navigate to={"/orders"} />
+              )
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
         />
         //purchases
         <Route
           path="/purchases"
-          element={user ? <HomePurchase /> : <Navigate to={"/login"} />}
+          element={
+            user ? (
+              getUser.userType == "admin" || getUser.userType == "inventory" ? (
+                <HomePurchase />
+              ) : (
+                <Navigate to={"/orders"} />
+              )
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
         />
         <Route
           path="/purchases/add"
-          element={user ? <AddPurchase /> : <Navigate to={"/login"} />}
+          element={
+            user ? (
+              getUser.userType == "admin" || getUser.userType == "inventory" ? (
+                <AddPurchase />
+              ) : (
+                <Navigate to={"/orders"} />
+              )
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
         />
         <Route
           path="/purchases/:id"
-          element={user ? <ViewPurchase /> : <Navigate to={"/login"} />}
+          element={
+            user ? (
+              getUser.userType == "admin" || getUser.userType == "inventory" ? (
+                <ViewPurchase />
+              ) : (
+                <Navigate to={"/orders"} />
+              )
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
         />
         <Route
           path="/purchases/:id/receive"
-          element={user ? <ReceivePurchase /> : <Navigate to={"/login"} />}
+          element={
+            user ? (
+              getUser.userType == "admin" || getUser.userType == "inventory" ? (
+                <ReceivePurchase />
+              ) : (
+                <Navigate to={"/orders"} />
+              )
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
         />
         {/* //orders //purchases */}
         <Route
           path="/orders"
-          element={user ? <HomeOrder /> : <Navigate to={"/login"} />}
+          element={
+            user ? (
+              getUser.userType == "admin" || getUser.userType == "cashier" ? (
+                <HomeOrder />
+              ) : (
+                <Navigate to={"/"} />
+              )
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
         />
         <Route
           path="/orders/add"
-          element={user ? <AddOrder /> : <Navigate to={"/login"} />}
+          element={
+            user ? (
+              getUser.userType == "admin" || getUser.userType == "cashier" ? (
+                <AddOrder />
+              ) : (
+                <Navigate to={"/"} />
+              )
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
         />
         <Route
           path="/orders/:id"
-          element={user ? <ViewOrder /> : <Navigate to={"/login"} />}
+          element={
+            user ? (
+              getUser.userType == "admin" || getUser.userType == "cashier" ? (
+                <ViewOrder />
+              ) : (
+                <Navigate to={"/"} />
+              )
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
         />
         {/* //login*/}
         <Route
