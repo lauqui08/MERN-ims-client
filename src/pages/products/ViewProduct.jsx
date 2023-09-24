@@ -113,7 +113,7 @@ const ViewProducts = () => {
       )}
       <div className="row mt-5 border">
         <div className="col border p-2">
-          <h5>Purchases</h5>
+          <h5>Pending Purchases</h5>
           <div className="table-responsive">
             <table className="table table-sm">
               <thead>
@@ -133,7 +133,11 @@ const ViewProducts = () => {
                         <td>{purchase.purchaseStatus}</td>
                       </tr>
                     ) : (
-                      ""
+                      <tr>
+                        <td className=" text-center" colSpan="3">
+                          No Record Found!
+                        </td>
+                      </tr>
                     );
                   })
                 ) : (
@@ -148,7 +152,7 @@ const ViewProducts = () => {
           </div>
         </div>
         <div className="col border p-2">
-          <h5>Orders</h5>
+          <h5>Pending Orders</h5>
           <div className="table-responsive">
             <table className="table table-sm">
               <thead>
