@@ -106,7 +106,7 @@ const HomeProduct = () => {
                     return (
                       <tr key={_id}>
                         <td>{productName}</td>
-                        <td>{productPrice}</td>
+                        <td>₱{productPrice}</td>
                         <td>{productQuantity}</td>
                         <td>{productStatus}</td>
                         <td className=" text-center">

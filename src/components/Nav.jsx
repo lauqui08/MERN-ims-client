@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useLocation,
+  useLoaderData,
+} from "react-router-dom";
 import { useContext } from "react";
 import { myContext } from "../context/LoginContext";
 import axios from "axios";
@@ -8,10 +13,11 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 const NavigationBar = () => {
-  const navigate = useNavigate();
+  const location = useLocation();
   const baseApi = import.meta.env.VITE_BASE_API;
   const user = JSON.parse(useContext(myContext));
   const [userInfo, setUserInfo] = useState({});
+  console.log(location.pathname);
   useEffect(() => {
     const getUserInfo = async () => {
       try {
@@ -27,7 +33,7 @@ const NavigationBar = () => {
   }, []);
   return (
     <>
-      <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
+      <Navbar collapseOnSelect expand="lg" className="bg-body-secondary">
         <Container>
           <Link to={"/"} className="navbar-brand">
             {"<"}Code{"/>"} De GO Inventory
@@ -37,17 +43,45 @@ const NavigationBar = () => {
             {user ? (
               <>
                 <Nav className="me-auto">
-                  <Link to={"/products"} className="nav-link">
+                  <Link
+                    to={"/products"}
+                    className={`nav-link ${
+                      location.pathname.includes("products")
+                        ? "text-primary fw-bolder"
+                        : ""
+                    }`}
+                  >
                     Products
                   </Link>
 
-                  <Link to={"/suppliers"} className="nav-link">
+                  <Link
+                    to={"/suppliers"}
+                    className={`nav-link ${
+                      location.pathname.includes("suppliers")
+                        ? "text-primary fw-bolder"
+                        : ""
+                    }`}
+                  >
                     Suppliers
                   </Link>
-                  <Link to={"/purchases"} className="nav-link">
+                  <Link
+                    to={"/purchases"}
+                    className={`nav-link ${
+                      location.pathname.includes("purchases")
+                        ? "text-primary fw-bolder"
+                        : ""
+                    }`}
+                  >
                     Purchases
                   </Link>
-                  <Link to={"/orders"} className="nav-link">
+                  <Link
+                    to={"/orders"}
+                    className={`nav-link ${
+                      location.pathname.includes("orders")
+                        ? "text-primary fw-bolder"
+                        : ""
+                    }`}
+                  >
                     Orders
                   </Link>
                 </Nav>

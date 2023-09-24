@@ -46,12 +46,13 @@ const ViewProducts = () => {
         </div>
       ) : products._id ? ( //if supplier is available
         <article className="p-3 shadow">
-          <h3>
+          <h4>
             Product Name:{" "}
             <span className="text-body-secondary">{productName}</span>
-          </h3>
+          </h4>
+
           <h4>
-            Price: <span className="text-body-secondary">{productPrice}</span>
+            Price: <span className="text-body-secondary">₱{productPrice}</span>
           </h4>
           <h4>
             Quantity:{" "}
@@ -87,6 +88,36 @@ const ViewProducts = () => {
           </div>
         </section>
       )}
+      <div className="row mt-5">
+        <div className="col">
+          <h5>Purchases</h5>
+          <div className="table-responsive">
+            <table className="table">
+              <thead>
+                <tr className="table-info">
+                  <th>Supplier Name</th>
+                  <th>Quantity</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+        <div className="col">
+          <h5>Orders</h5>
+          <div className="table-responsive">
+            <table className="table">
+              <thead>
+                <tr className="table-info">
+                  <th>Customer Name</th>
+                  <th>Quantity</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
