@@ -5,6 +5,7 @@ const Register = () => {
   const baseApi = import.meta.env.VITE_BASE_API;
   const [isLaoding, setIdLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [registration, setRegistration] = useState({
     fullname: "",
     email: "",
@@ -39,6 +40,7 @@ const Register = () => {
         password: "",
         confirmPassword: "",
       });
+      setSuccessMessage(response.data.message);
       setIdLoading(false);
     } catch (error) {
       setIdLoading(false);
@@ -48,14 +50,17 @@ const Register = () => {
   };
   return (
     <div className="container mt-5">
-      Register
-      <p className="text-info bg-dark">
-        Please write down your password. This initial registration is for admin
-        account.
-      </p>
+      <h4>Register User</h4>
       {errorMessage ? (
         <div className="alert alert-warning" role="alert">
           {errorMessage}
+        </div>
+      ) : (
+        ""
+      )}
+      {successMessage ? (
+        <div className="alert alert-success" role="alert">
+          {successMessage}
         </div>
       ) : (
         ""

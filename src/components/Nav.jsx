@@ -95,6 +95,20 @@ const NavigationBar = () => {
                   ) : (
                     ""
                   )}
+                  {userInfo.userType == "admin" ? (
+                    <Link
+                      to={"/users"}
+                      className={`nav-link ${
+                        location.pathname.includes("users")
+                          ? "text-primary fw-bolder"
+                          : ""
+                      }`}
+                    >
+                      Users
+                    </Link>
+                  ) : (
+                    ""
+                  )}
                 </Nav>
 
                 <Nav>

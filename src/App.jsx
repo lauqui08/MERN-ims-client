@@ -25,6 +25,7 @@ import AddOrder from "./pages/orders/AddOrder";
 //Login
 import Login from "./pages/Login";
 //users
+import HomeUser from "./pages/users/HomeUser";
 import ChangePassword from "./pages/users/ChangePassword";
 import Register from "./pages/users/Register";
 //dashboard
@@ -278,8 +279,32 @@ function App() {
         />
         {/* users */}
         <Route
+          path="/users"
+          element={
+            user ? (
+              getUser.userType == "admin" ? (
+                <HomeUser />
+              ) : (
+                <Navigate to={"/users"} />
+              )
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
+        />
+        <Route
           path="/register"
-          element={user ? <Register /> : <Navigate to={"/login"} />}
+          element={
+            user ? (
+              getUser.userType == "admin" ? (
+                <Register />
+              ) : (
+                <Navigate to={"/"} />
+              )
+            ) : (
+              <Navigate to={"/login"} />
+            )
+          }
         />
         <Route
           path="/change-password"
