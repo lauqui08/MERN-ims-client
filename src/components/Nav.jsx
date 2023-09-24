@@ -17,7 +17,6 @@ const NavigationBar = () => {
   const baseApi = import.meta.env.VITE_BASE_API;
   const user = JSON.parse(useContext(myContext));
   const [userInfo, setUserInfo] = useState({});
-  console.log(location.pathname);
   useEffect(() => {
     const getUserInfo = async () => {
       try {
@@ -94,9 +93,10 @@ const NavigationBar = () => {
                     title={userInfo.fullname}
                     id="collapsible-nav-dropdown"
                   >
-                    <NavDropdown.Item>Action</NavDropdown.Item>
-                    <NavDropdown.Item>Another action</NavDropdown.Item>
-                    <NavDropdown.Item>Something</NavDropdown.Item>
+                    <Link to={"/change-password"} className="dropdown-item">
+                      {" "}
+                      Change Password
+                    </Link>
                     <NavDropdown.Divider />
                     <NavDropdown.Item
                       onClick={() => {

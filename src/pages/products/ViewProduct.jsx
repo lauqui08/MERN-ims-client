@@ -5,21 +5,44 @@ import runningPikachu from "../../assets/pikachu-running.gif";
 const ViewProducts = () => {
   const { id } = useParams();
   const baseApi = import.meta.env.VITE_BASE_API;
-  const [products, setProducts] = useState({});
+  const [product, setProduct] = useState({});
+  const [purchases, setPurchases] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [isLoading, setIsloading] = useState(true);
   const [errorMessage, setErrorMEssage] = useState("");
 
   useEffect(() => {
     const getProduct = async () => {
-      const response = await axios.get(baseApi + "products/" + id);
-      if (response.status !== 200) {
-        setErrorMEssage("Failed to fetch data. Please try again.");
-        return;
+      try {
+        const response = await axios.get(baseApi + "products/" + id);
+        if (response.status !== 200) {
+          setErrorMEssage("Failed to fetch data. Please try again.");
+          return;
+        }
+        setProduct(response.data);
+        setIsloading(false);
+      } catch (error) {
+        console.log(error.message);
       }
-      setProducts(response.data);
-      setIsloading(false);
+    };
+
+    const getPurchases = async () => {
+      const response = await axios.get(
+        baseApi + "purchases/product._id/" + id + "/search"
+      );
+      console.log(response);
+      setPurchases(response.data);
+    };
+    const getOrders = async () => {
+      const response = await axios.get(
+        baseApi + "orders/product/" + product.productName + "/search"
+      );
+      console.log(response);
+      setOrders(response.data);
     };
     getProduct();
+    getPurchases();
+    getOrders();
   }, []);
 
   const deleteSupplier = async (id) => {
@@ -27,12 +50,12 @@ const ViewProducts = () => {
     if (validate) {
       setIsloading(true);
       const response = await axios.delete(baseApi + "products/" + id);
-      setProducts({});
+      setProduct({});
       setIsloading(false);
     }
   };
   const { _id, productName, productPrice, productQuantity, productStatus } =
-    products;
+    product;
   return (
     <div className="container mt-5">
       ViewProducts
@@ -44,7 +67,7 @@ const ViewProducts = () => {
             alt="Loading..."
           />
         </div>
-      ) : products._id ? ( //if supplier is available
+      ) : product._id ? ( //if supplier is available
         <article className="p-3 shadow">
           <h4>
             Product Name:{" "}
@@ -88,11 +111,11 @@ const ViewProducts = () => {
           </div>
         </section>
       )}
-      <div className="row mt-5">
-        <div className="col">
+      <div className="row mt-5 border">
+        <div className="col border p-2">
           <h5>Purchases</h5>
           <div className="table-responsive">
-            <table className="table">
+            <table className="table table-sm">
               <thead>
                 <tr className="table-info">
                   <th>Supplier Name</th>
@@ -100,13 +123,34 @@ const ViewProducts = () => {
                   <th>Status</th>
                 </tr>
               </thead>
+              <tbody>
+                {purchases[0] ? (
+                  purchases.map((purchase) => {
+                    return purchase.purchaseStatus != "received" ? (
+                      <tr key={purchase._id}>
+                        <td>{purchase.supplier.supplierName}</td>
+                        <td>{purchase.quantity}</td>
+                        <td>{purchase.purchaseStatus}</td>
+                      </tr>
+                    ) : (
+                      ""
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td className=" text-center" colSpan="3">
+                      No Record Found!
+                    </td>
+                  </tr>
+                )}
+              </tbody>
             </table>
           </div>
         </div>
-        <div className="col">
+        <div className="col border p-2">
           <h5>Orders</h5>
           <div className="table-responsive">
-            <table className="table">
+            <table className="table table-sm">
               <thead>
                 <tr className="table-info">
                   <th>Customer Name</th>
@@ -114,6 +158,31 @@ const ViewProducts = () => {
                   <th>Status</th>
                 </tr>
               </thead>
+              <tbody>
+                {orders[0] ? (
+                  orders.map((order) => {
+                    return order.orderStatus == "pending" ? (
+                      <tr key={order._id}>
+                        <td>{order.customerName}</td>
+                        <td>{order.quantity}</td>
+                        <td>{order.orderStatus}</td>
+                      </tr>
+                    ) : (
+                      <tr>
+                        <td className=" text-center" colSpan="3">
+                          No Record Found!
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td className=" text-center" colSpan="3">
+                      No Record Found!
+                    </td>
+                  </tr>
+                )}
+              </tbody>
             </table>
           </div>
         </div>

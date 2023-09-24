@@ -11,6 +11,7 @@ function Login() {
   const user = useContext(myContext);
   const [isLoading, setIsLoading] = useState(true);
   const [checkAdmin, setCheckAdmin] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
   const baseApi = import.meta.env.VITE_BASE_API;
   const [login, setLogin] = useState({
     email: "",
@@ -26,6 +27,7 @@ function Login() {
         setIsLoading(false);
       } catch (error) {
         console.log(error.message);
+        setErrorMessage(error.response.data.error);
         setIsLoading(false);
       }
     };
@@ -37,6 +39,7 @@ function Login() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
     setIsLoading(true);
     try {
       const response = await axios.post(baseApi + "users/login", { ...login });
@@ -44,12 +47,20 @@ function Login() {
       setIsLoading(false);
       window.location.reload();
     } catch (error) {
+      setErrorMessage(error.response.data.error);
       setIsLoading(false);
       console.log(error.message);
     }
   };
   return (
     <div className="container mt-5">
+      {errorMessage ? (
+        <div className="alert alert-warning" role="alert">
+          {errorMessage}
+        </div>
+      ) : (
+        ""
+      )}
       {isLoading ? (
         <div className="d-flex justify-content-center">
           <img
@@ -69,6 +80,7 @@ function Login() {
                 onChange={handleChange}
                 type="email"
                 name="email"
+                value={login.email}
                 placeholder="email@example.com"
               />
             </Col>
@@ -87,6 +99,7 @@ function Login() {
                 onChange={handleChange}
                 type="password"
                 name="password"
+                value={login.password}
                 placeholder="Password"
               />
             </Col>
