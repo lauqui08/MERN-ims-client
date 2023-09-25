@@ -113,7 +113,7 @@ const ViewProducts = () => {
       )}
       <div className="row mt-5 border">
         <div className="col border p-2">
-          <h5>Pending Purchases</h5>
+          <h5>Purchases</h5>
           <div className="table-responsive">
             <table className="table table-sm">
               <thead>
@@ -126,17 +126,11 @@ const ViewProducts = () => {
               <tbody>
                 {purchases[0] ? (
                   purchases.map((purchase) => {
-                    return purchase.purchaseStatus != "received" ? (
+                    return (
                       <tr key={purchase._id}>
                         <td>{purchase.supplier.supplierName}</td>
                         <td>{purchase.quantity}</td>
                         <td>{purchase.purchaseStatus}</td>
-                      </tr>
-                    ) : (
-                      <tr>
-                        <td className=" text-center" colSpan="3">
-                          No Record Found!
-                        </td>
                       </tr>
                     );
                   })
@@ -152,7 +146,7 @@ const ViewProducts = () => {
           </div>
         </div>
         <div className="col border p-2">
-          <h5>Pending Orders</h5>
+          <h5>Orders</h5>
           <div className="table-responsive">
             <table className="table table-sm">
               <thead>
@@ -165,17 +159,11 @@ const ViewProducts = () => {
               <tbody>
                 {orders[0] ? (
                   orders.map((order) => {
-                    return order.orderStatus == "pending" ? (
+                    return (
                       <tr key={order._id}>
                         <td>{order.customerName}</td>
                         <td>{order.quantity}</td>
                         <td>{order.orderStatus}</td>
-                      </tr>
-                    ) : (
-                      <tr>
-                        <td className=" text-center" colSpan="3">
-                          No Record Found!
-                        </td>
                       </tr>
                     );
                   })
