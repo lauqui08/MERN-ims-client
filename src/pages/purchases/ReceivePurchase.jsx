@@ -9,6 +9,7 @@ const ReceivePurchase = () => {
   const [remarks, setRemarks] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMEssage] = useState("");
+
   useEffect(() => {
     const getPurchase = async () => {
       try {
@@ -21,6 +22,7 @@ const ReceivePurchase = () => {
     };
     getPurchase();
   }, [isLoading]);
+
   const addReceivedQuantityToInventory = async (id, receivedQuantity) => {
     try {
       const response = await axios.patch(baseApi + "products/" + id, {
@@ -87,6 +89,8 @@ const ReceivePurchase = () => {
     purchase;
   return (
     <div className="container shadow p-5 mt-5">
+      <h4>Product Receiving:</h4>
+
       {errorMessage ? (
         <div className="alert alert-danger" role="alert">
           {errorMessage}
@@ -106,7 +110,6 @@ const ReceivePurchase = () => {
       ) : (
         <div className="d-flex justify-content-center">
           <div className="col-6">
-            <h4>Product to received: {product.productName}</h4>
             <form className="form-control" onSubmit={handleSubmit}>
               <div className="row p-2">
                 <div className="col-12 p-2">
